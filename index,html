@@ -1,0 +1,802 @@
+
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ENEM Sentimental | Hansel Edition</title>
+
+<style>
+@import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&family=Playfair+Display:wght@700&display=swap');
+
+:root {
+    --bg: #100e18;
+    --card: #1b1825;
+    --purple: #a78bfa;
+    --pink: #f0a6c8;
+    --text: #f5efff;
+    --muted: #aaa2bb;
+    --border: #393244;
+}
+
+* { box-sizing: border-box; }
+
+body {
+    margin: 0;
+    background: radial-gradient(circle at top left, #2b1c3e, transparent 45%), var(--bg);
+    color: var(--text);
+    font-family: 'DM Sans', sans-serif;
+    min-height: 100vh;
+}
+
+.container {
+    width: 100%;
+    max-width: 850px;
+    margin: auto;
+    padding: 25px 18px 70px;
+}
+
+header {
+    text-align: center;
+    margin: 40px 0;
+}
+
+header h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(2rem, 7vw, 4rem);
+    color: var(--pink);
+    margin-bottom: 10px;
+}
+
+header p {
+    color: var(--muted);
+    line-height: 1.7;
+}
+
+.card {
+    background: rgba(27, 24, 37, .95);
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    padding: 28px;
+    margin-bottom: 20px;
+    box-shadow: 0 10px 35px rgba(0,0,0,.2);
+}
+
+.tag {
+    color: var(--purple);
+    text-transform: uppercase;
+    font-size: .75rem;
+    letter-spacing: 2px;
+    font-weight: bold;
+}
+
+.progress-area { margin: 20px 0; }
+
+.progress-text {
+    display: flex;
+    justify-content: space-between;
+    font-size: .8rem;
+    color: var(--muted);
+    margin-bottom: 8px;
+}
+
+.progress {
+    height: 8px;
+    background: #342e40;
+    border-radius: 99px;
+    overflow: hidden;
+}
+
+.progress-fill {
+    width: 0%;
+    height: 100%;
+    background: linear-gradient(90deg, var(--purple), var(--pink));
+    transition: .3s;
+}
+
+.question-title {
+    font-size: 1.35rem;
+    line-height: 1.5;
+    margin: 24px 0;
+}
+
+.text-base {
+    background: #14111d;
+    border-left: 3px solid var(--purple);
+    padding: 18px;
+    color: #d1c8dc;
+    font-size: .95rem;
+    line-height: 1.85;
+    border-radius: 5px;
+    margin-bottom: 25px;
+    white-space: pre-line;
+}
+
+.answers {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.answer {
+    background: #242031;
+    color: var(--text);
+    border: 1px solid #40384e;
+    border-radius: 12px;
+    padding: 16px;
+    text-align: left;
+    cursor: pointer;
+    transition: .2s;
+    font: inherit;
+    line-height: 1.5;
+}
+
+.answer:hover {
+    border-color: var(--purple);
+    background: #30273d;
+    transform: translateY(-1px);
+}
+
+.answer.wrong {
+    opacity: .45;
+    border-color: #e77d89;
+    text-decoration: line-through;
+    pointer-events: none;
+}
+
+.answer.correct {
+    border-color: #91d8ae;
+    background: #21392e;
+}
+
+.feedback {
+    min-height: 28px;
+    margin-top: 18px;
+    color: var(--pink);
+    font-size: .9rem;
+}
+
+button.main-button {
+    background: linear-gradient(120deg, #8f6be8, #c57aab);
+    color: white;
+    border: 0;
+    padding: 14px 22px;
+    border-radius: 12px;
+    font-size: 1rem;
+    font-weight: bold;
+    cursor: pointer;
+    margin-top: 18px;
+}
+
+button.main-button:hover { filter: brightness(1.1); }
+
+.hidden { display: none !important; }
+
+.result {
+    text-align: center;
+    padding: 30px 10px;
+}
+
+.result h2 {
+    font-family: 'Playfair Display', serif;
+    color: var(--pink);
+    font-size: 2.5rem;
+}
+
+.result .score {
+    font-size: 3rem;
+    color: var(--purple);
+    font-weight: bold;
+}
+
+.footer {
+    text-align: center;
+    color: #716a7e;
+    font-size: .8rem;
+    margin-top: 50px;
+}
+
+@media (max-width: 600px) {
+    .card { padding: 20px; }
+    .question-title { font-size: 1.15rem; }
+}
+</style>
+</head>
+
+<body>
+<div class="container">
+
+<header>
+    <div class="tag">Instituto Nacional de Estudos Sentimentais</div>
+    <h1>ENEM Sentimental</h1>
+    <p>Hansel Edition · Prova de conhecimentos absurdamente específicos</p>
+    <p><i>Leia atentamente. O elaborador da prova não estava bem.</i></p>
+</header>
+
+<div id="intro" class="card">
+    <h2>Instruções ao candidato</h2>
+
+    <div class="text-base">
+O presente exame tem como objetivo avaliar a capacidade da candidata
+de interpretar acontecimentos, memorizar informações aparentemente
+insignificantes, reconhecer referências culturais e realizar cálculos
+matemáticos cuja aplicação prática na vida cotidiana permanece
+cientificamente desconhecida.
+
+As questões apresentam alternativas deliberadamente semelhantes.
+Em caso de erro, a opção selecionada será eliminada, permitindo
+uma nova tentativa. Tal mecanismo representa uma crítica ao sistema
+educacional, à existência humana e, principalmente, à incapacidade
+de Hansel de fazer perguntas simples sem transformá-las em um
+documento de 47 páginas.
+
+Boa prova. O Ministério do Caos não se responsabiliza por crises
+acadêmicas, suspeitas, cálculos desnecessários ou interpretações
+equivocadas de mensagens enviadas às 3 horas da manhã.
+    </div>
+
+    <p><strong>16 questões · Sem limite de tempo · Uma alternativa correta</strong></p>
+    <button class="main-button" onclick="startQuiz()">INICIAR PROVA</button>
+</div>
+
+<div id="quiz" class="hidden">
+    <div class="progress-area">
+        <div class="progress-text">
+            <span id="questionNumber">Questão 1</span>
+            <span id="scoreText">Pontuação: 0</span>
+        </div>
+        <div class="progress">
+            <div class="progress-fill" id="progressFill"></div>
+        </div>
+    </div>
+
+    <div class="card">
+        <div class="tag" id="category">Categoria</div>
+        <h2 class="question-title" id="questionTitle"></h2>
+        <div class="text-base" id="questionText"></div>
+        <div class="answers" id="answers"></div>
+        <div class="feedback" id="feedback"></div>
+        <button class="main-button hidden" id="nextButton" onclick="nextQuestion()">
+            PRÓXIMA QUESTÃO
+        </button>
+    </div>
+</div>
+
+<div id="result" class="card hidden result">
+    <div class="tag">Resultado oficial</div>
+    <h2>Fim da avaliação.</h2>
+    <div class="score" id="finalScore"></div>
+    <p id="resultMessage"></p>
+    <div class="text-base" id="finalText"></div>
+    <button class="main-button" onclick="location.reload()">REFAZER PROVA</button>
+</div>
+
+<footer class="footer">
+    Instituto Nacional de Estudos Sentimentais · Ministério do Caos · 2026
+</footer>
+
+</div>
+
+<script>
+const questions = [
+
+{
+category: "Memória histórica",
+title: "QUESTÃO 01 · O início da ocorrência sentimental",
+text: `Em determinados acontecimentos, a memória humana atribui significado
+a elementos aparentemente banais, como o ambiente, a música, o horário
+e a disposição dos indivíduos presentes. Em estudos hipotéticos sobre
+relações interpessoais, verificou-se que a combinação de estímulos
+auditivos e espaciais pode contribuir para a formação de lembranças
+duradouras, ainda que nenhum dos participantes tenha percebido
+imediatamente a importância do momento.
+
+Considerando o registro histórico de Hansel e Milena, a reconstrução
+mais precisa do evento inicial corresponde à situação em que:`,
+answers: [
+"o relacionamento começou no Nuart, em 24 de março, às 17h, enquanto tocava Strawberry Fields Forever.",
+"o relacionamento começou no Nuart, em 23 de março, às 17h, enquanto tocava Strawberry Fields Forever.",
+"o relacionamento começou no Nuart, em 24 de março, às 17h, enquanto tocava uma música dos Beatles diferente.",
+"o relacionamento começou no Nuart, em 24 de março, às 18h, enquanto tocava Strawberry Fields Forever."
+],
+correct: 0
+},
+
+{
+category: "Interpretação musical",
+title: "QUESTÃO 02 · O morango, o campo e a irrelevância do examinador",
+text: `A música Strawberry Fields Forever, dos Beatles, apresenta uma construção
+sonora e lírica que permite interpretações variadas, envolvendo memória,
+percepção, subjetividade e experiências pessoais. A associação entre
+uma obra musical e um evento vivido pode fazer com que a música passe
+a representar não apenas sua composição original, mas também uma
+lembrança específica de determinado indivíduo.
+
+Nesse contexto, ao relacionar a música ao início do relacionamento de
+Hansel e Milena, pode-se afirmar que:`,
+answers: [
+"a música perdeu sua composição original e passou a ser exclusivamente uma produção sentimental do casal.",
+"a música pode adquirir um significado pessoal adicional sem deixar de ser a mesma obra musical.",
+"a música passa a ter valor histórico apenas se ambos lembrarem igualmente de todos os detalhes.",
+"a música foi composta especificamente para representar o relacionamento."
+],
+correct: 1
+},
+
+{
+category: "Hansel · Identidade",
+title: "QUESTÃO 03 · A definição que não cabe em uma única caixa",
+text: `A identidade de gênero relaciona-se à maneira como uma pessoa
+experimenta e compreende seu próprio gênero. Essa dimensão da identidade
+não depende obrigatoriamente de padrões de vestimenta, comportamento,
+aparência física ou expectativas sociais, podendo manifestar-se de
+maneiras diversas ao longo da experiência individual.
+
+Ao considerar as características identitárias de Hansel, a interpretação
+mais coerente com as informações apresentadas é:`,
+answers: [
+"Hansel apresenta uma identidade exclusivamente masculina, sendo sua aparência andrógina apenas uma característica estética.",
+"Hansel é gênero fluido, e sua expressão estética não precisa corresponder a uma única expectativa de gênero.",
+"Hansel não possui identidade de gênero, uma vez que utiliza elementos estéticos femininos e masculinos.",
+"Hansel apresenta uma identidade exclusivamente feminina, pois a aparência determina a classificação de gênero."
+],
+correct: 1
+},
+
+{
+category: "Commedia dell'arte",
+title: "QUESTÃO 04 · O Arlequim e a máscara",
+text: `A Commedia dell'arte, manifestação teatral popular desenvolvida na Itália,
+caracteriza-se pela improvisação, pelo uso de personagens arquetípicos,
+pela expressividade corporal e pela presença de máscaras ou figurinos
+marcantes. Entre suas figuras tradicionais encontra-se Arlequim,
+personagem frequentemente associado à agilidade, à comicidade, à astúcia
+e à dinâmica de relações entre diferentes tipos sociais.
+
+Ao associar Hansel ao arquétipo do Arlequim, sem confundi-lo com
+personagens de outras obras contemporâneas, destaca-se:`,
+answers: [
+"a relação com o improviso, o caos, a comicidade e a tradição teatral da Commedia dell'arte.",
+"a relação com a magia elemental e os poderes de um personagem de videogame que possui o mesmo nome.",
+"a associação obrigatória entre o Arlequim e um comportamento exclusivamente cruel e calculista.",
+"a representação de um personagem cuja principal característica histórica é a ausência de humor."
+],
+correct: 0
+},
+
+{
+category: "Danganronpa · Investigação",
+title: "QUESTÃO 05 · O julgamento de uma evidência inconveniente",
+text: `Em uma investigação inspirada na estrutura narrativa de Danganronpa,
+os participantes devem analisar depoimentos, identificar contradições
+e estabelecer relações entre evidências. Entretanto, a existência
+de uma informação verdadeira não garante que sua interpretação esteja
+correta, uma vez que dados podem ser apresentados fora de contexto
+ou utilizados para sustentar conclusões precipitadas.
+
+Em um julgamento hipotético, uma personagem afirma que Hansel estava
+em determinado lugar às 17h, enquanto outra afirma que ouviu uma música
+associada a ele. A conclusão metodologicamente mais adequada seria:`,
+answers: [
+"aceitar imediatamente o depoimento mais detalhado, porque detalhes adicionais comprovam sua veracidade.",
+"considerar ambos os depoimentos verdadeiros, pois informações diferentes não podem entrar em contradição.",
+"descartar a música como evidência, pois acontecimentos sentimentais não podem ser investigados.",
+"comparar os depoimentos com outras evidências, verificando contexto, consistência e possíveis contradições."
+],
+correct: 3
+},
+
+{
+category: "Danganronpa · Lógica",
+title: "QUESTÃO 06 · A conclusão que parece óbvia",
+text: `Durante uma investigação, um estudante observa que Hansel gosta
+de personagens teatrais, costuma associar humor a situações caóticas
+e demonstra interesse por histórias com elementos psicológicos.
+O estudante conclui, a partir dessas observações, que Hansel
+necessariamente gosta de qualquer obra que possua um palhaço,
+uma máscara ou uma narrativa de mistério.
+
+Essa conclusão apresenta um problema lógico porque:`,
+answers: [
+"estabelece uma generalização que não pode ser garantida apenas pelas preferências observadas.",
+"utiliza informações verdadeiras, tornando impossível que a conclusão esteja equivocada.",
+"confunde uma personagem teatral com uma categoria matemática de elementos equivalentes.",
+"considera que todo interesse artístico precisa apresentar uma relação causal com a personalidade."
+],
+correct: 0
+},
+
+{
+category: "Marcya · Interpretação",
+title: "QUESTÃO 07 · O problema da interpretação de mensagens",
+text: `Em uma situação social hipotética, Milena observa Hansel conversando
+com Marcya. A conversa, por si só, não apresenta evidências de
+desrespeito, quebra de confiança ou comportamento inadequado.
+Entretanto, diferentes experiências pessoais podem influenciar
+a interpretação de uma mesma situação, fazendo com que uma pessoa
+atribua significados distintos a acontecimentos semelhantes.
+
+Nesse contexto, uma abordagem que prioriza comunicação e análise
+da situação, sem transformar suposições em fatos, consiste em:`,
+answers: [
+"considerar qualquer interação como prova de interesse, independentemente do contexto.",
+"evitar conversar sobre o assunto, pois a ausência de diálogo elimina a possibilidade de conflito.",
+"reconhecer os sentimentos envolvidos e conversar sobre limites e percepções sem presumir intenções.",
+"concluir que a interação é necessariamente inadequada, pois o desconforto individual comprova a intenção de terceiros."
+],
+correct: 2
+},
+
+{
+category: "Hansel · Personalidade",
+title: "QUESTÃO 08 · O caos como escolha narrativa",
+text: `Hansel é frequentemente representado como alguém que aprecia
+situações imprevisíveis, humor, teatralidade e acontecimentos
+absurdos. Contudo, sua relação com o caos não deve ser interpretada
+automaticamente como ausência de sentimentos, incapacidade de
+compreender consequências ou desejo de prejudicar todas as pessoas
+ao seu redor.
+
+Considerando essa construção de personagem, a interpretação mais
+consistente é a de que:`,
+answers: [
+"o caos é uma ferramenta de expressão e diversão, que não implica necessariamente crueldade indiscriminada.",
+"o caos determina que Hansel seja incapaz de estabelecer vínculos afetivos duradouros.",
+"o humor serve exclusivamente para esconder uma intenção de prejudicar todas as pessoas.",
+"a imprevisibilidade elimina qualquer possibilidade de responsabilidade por suas ações."
+],
+correct: 0
+},
+
+{
+category: "Conselho dos Hansels",
+title: "QUESTÃO 09 · Uma assembleia que não deveria existir",
+text: `O Conselho dos Hansels reúne diferentes facetas de uma mesma
+personalidade, organizadas em representações caricaturais de
+características distintas. A coexistência de figuras intelectuais,
+dramáticas, românticas, mórbidas, bondosas, preguiçosas e outras
+expressões de comportamento permite a construção de conflitos
+internos e diálogos exagerados.
+
+Em uma narrativa envolvendo esse conselho, sua principal função
+literária pode ser compreendida como:`,
+answers: [
+"representar treze pessoas biologicamente independentes que compartilham apenas o mesmo sobrenome.",
+"eliminar qualquer conflito interno do personagem, pois todas as facetas possuem a mesma opinião.",
+"demonstrar que cada personalidade deve ser interpretada como um diagnóstico clínico literal.",
+"externalizar diferentes tendências, conflitos e aspectos da personalidade por meio de personagens caricaturais."
+],
+correct: 3
+},
+
+{
+category: "Matemática · Meme",
+title: "QUESTÃO 10 · O cálculo da saudade absolutamente científica",
+text: `Um pesquisador do Instituto Nacional de Sentimentos decidiu medir
+a duração de uma lembrança utilizando unidades de tempo convencionais.
+Após uma análise extremamente séria, verificou-se que o casal começou
+a namorar às 17h do dia 24 de março.
+
+O pesquisador, que aparentemente não possuía nenhum projeto
+mais importante, resolveu calcular quantos minutos existem
+em 3 horas, para representar a duração de uma reunião
+imaginária do Conselho dos Hansels.
+
+O resultado dessa operação corresponde a:`,
+answers: [
+"160 minutos, considerando que o caos altera a duração convencional de uma hora.",
+"180 minutos, considerando a equivalência entre hora e minuto.",
+"300 minutos, considerando que cada hora sentimental possui 100 minutos.",
+"183 minutos, considerando uma correção de três minutos feita por Hansel."
+],
+correct: 1
+},
+
+{
+category: "Matemática · Conselho do Caos",
+title: "QUESTÃO 11 · A população de Hansels",
+text: `Em uma atividade administrativa fictícia, o Imperador Hansel
+determina que cada uma das doze facetas do Conselho receba
+quatro documentos. O Hansel Original, responsável pela organização,
+decide que também precisará receber a mesma quantidade de documentos,
+apesar de não participar da fotografia oficial do grupo.
+
+Considerando que todos os treze integrantes recebem quatro documentos
+cada, a quantidade total de documentos distribuídos será:`,
+answers: [
+"48 documentos, pois somente as doze facetas devem ser contabilizadas.",
+"52 documentos, pois o Original recebe quatro documentos adicionais.",
+"56 documentos, pois o Imperador recebe uma quantidade duplicada.",
+"13 documentos, pois cada integrante recebe apenas um documento oficial."
+],
+correct: 1
+},
+
+{
+category: "Matemática · Beatles",
+title: "QUESTÃO 12 · A playlist do desespero",
+text: `Um estudante organiza uma playlist com 40 músicas para estudar.
+Entre elas, 10 são dos Beatles. Durante uma análise estatística
+de relevância questionável, o estudante decide calcular a proporção
+de músicas da banda em relação ao total da playlist.
+
+A porcentagem correspondente, considerando que todas as músicas
+possuem a mesma possibilidade de reprodução, é:`,
+answers: [
+"10%, porque o número de músicas da banda deve ser dividido por 100.",
+"40%, porque a playlist possui 40 músicas no total.",
+"25%, porque 10 representa um quarto de 40.",
+"20%, porque a proporção deve ser arredondada para o valor sentimental."
+],
+correct: 2
+},
+
+{
+category: "Hansel · Estética",
+title: "QUESTÃO 13 · A aparência e o personagem",
+text: `A construção visual de Hansel combina elementos delicados,
+andrógenos e teatrais. Entre suas características figurativas estão
+cabelos volumosos e escuros, heterocromia, pupilas em formato
+de estrela e ornamentos que reforçam uma estética ligada
+ao imaginário fantástico.
+
+Ao elaborar uma representação visual coerente com essa descrição,
+a alternativa que reúne corretamente os elementos centrais é:`,
+answers: [
+"cabelos escuros volumosos e cacheados, heterocromia azul e roxa, pupilas de estrela e aparência andrógina.",
+"cabelos lisos e claros, olhos verdes iguais, pupilas circulares e armadura militar integral.",
+"cabelos escuros curtos, olhos de mesma cor, aparência exclusivamente masculina e ausência de ornamentos.",
+"cabelos ruivos, olhos totalmente negros, asas físicas e uniforme de imperador obrigatório."
+],
+correct: 0
+},
+
+{
+category: "Teatro · Interpretação",
+title: "QUESTÃO 14 · A máscara que não explica tudo",
+text: `No teatro, a máscara pode representar uma identidade social,
+uma convenção dramática, uma transformação simbólica ou
+uma estratégia narrativa. Sua utilização não significa necessariamente
+que o personagem esteja mentindo, uma vez que a máscara também
+pode ampliar características, facilitar a identificação de arquétipos
+ou construir uma linguagem corporal específica.
+
+Ao relacionar a máscara teatral à figura de Hansel, a interpretação
+mais adequada é:`,
+answers: [
+"a máscara demonstra obrigatoriamente que Hansel esconde sua identidade real de todas as pessoas.",
+"a máscara funciona exclusivamente como um objeto decorativo sem relação com a construção de personagens.",
+"a máscara elimina a expressividade, tornando impossível comunicar emoções em apresentações teatrais.",
+"a máscara pode reforçar a teatralidade, representar arquétipos e criar diferentes camadas de interpretação."
+],
+correct: 3
+},
+
+{
+category: "Hansel · Lore",
+title: "QUESTÃO 15 · A embarcação que desafia o departamento de física",
+text: `Em uma narrativa fantástica, embarcações podem funcionar como
+símbolos de liberdade, aventura, deslocamento, pertencimento
+ou ruptura com a realidade convencional. O navio THE TAX COLLECTOR,
+associado à estética caótica de Hansel, apresenta velas roxas,
+uma bandeira peculiar e uma tripulação cuja organização administrativa
+provavelmente seria reprovada por qualquer auditor.
+
+Nesse cenário, a embarcação representa sobretudo:`,
+answers: [
+"um veículo comercial perfeitamente regulamentado, sem qualquer vínculo com a personalidade de Hansel.",
+"uma extensão do imaginário caótico e teatral do personagem, reunindo aventura, humor e identidade visual.",
+"uma embarcação real cuja existência pode ser confirmada por registros portuários contemporâneos.",
+"um símbolo de disciplina militar, silêncio e ausência completa de improvisação."
+],
+correct: 1
+},
+
+{
+category: "Matemática · ENEM do caos",
+title: "QUESTÃO 16 · A última atrocidade matemática",
+text: `O Ministério do Caos decidiu realizar uma pesquisa sobre a frequência
+com que Hansel faz referências desnecessárias a assuntos aleatórios.
+Em uma amostra de 20 conversas, foram identificadas 5 referências
+a Danganronpa, 4 ao teatro, 6 a jogos, 3 a músicas e 2 a assuntos
+que não puderam ser classificados, pois Hansel mudou de assunto
+antes que o pesquisador terminasse a anotação.
+
+A porcentagem de conversas que apresentaram referências a Danganronpa,
+considerando o total de 20 conversas, corresponde a:`,
+answers: [
+"15%, pois cinco ocorrências devem ser reduzidas para uma categoria de relevância.",
+"20%, pois cinco representa um quinto de vinte.",
+"25%, pois cinco representa um quarto de vinte.",
+"30%, pois as referências a Danganronpa devem ser somadas às referências teatrais."
+],
+correct: 2
+}
+
+];
+
+let currentQuestion = 0;
+let score = 0;
+let firstAttempt = true;
+let currentAnswers = [];
+
+function shuffle(array) {
+    const arr = [...array];
+
+    for (let i = arr.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [arr[i], arr[j]] = [arr[j], arr[i]];
+    }
+
+    return arr;
+}
+
+function startQuiz() {
+    document.getElementById("intro").classList.add("hidden");
+    document.getElementById("quiz").classList.remove("hidden");
+
+    currentQuestion = 0;
+    score = 0;
+
+    showQuestion();
+}
+
+function showQuestion() {
+    const q = questions[currentQuestion];
+
+    firstAttempt = true;
+
+    document.getElementById("questionNumber").textContent =
+        `Questão ${currentQuestion + 1} de ${questions.length}`;
+
+    document.getElementById("scoreText").textContent =
+        `Pontuação: ${score}`;
+
+    document.getElementById("progressFill").style.width =
+        `${(currentQuestion / questions.length) * 100}%`;
+
+    document.getElementById("category").textContent = q.category;
+    document.getElementById("questionTitle").textContent = q.title;
+    document.getElementById("questionText").textContent = q.text;
+
+    document.getElementById("feedback").textContent = "";
+    document.getElementById("nextButton").classList.add("hidden");
+
+    currentAnswers = q.answers.map((answer, index) => ({
+        text: answer,
+        correct: index === q.correct
+    }));
+
+    currentAnswers = shuffle(currentAnswers);
+
+    renderAnswers();
+}
+
+function renderAnswers() {
+    const answerContainer = document.getElementById("answers");
+    answerContainer.innerHTML = "";
+
+    currentAnswers.forEach((answer, index) => {
+        const button = document.createElement("button");
+        button.className = "answer";
+
+        button.textContent =
+            String.fromCharCode(65 + index) + ") " + answer.text;
+
+        button.onclick = () => selectAnswer(button, answer);
+
+        answerContainer.appendChild(button);
+    });
+}
+
+function selectAnswer(button, answer) {
+    if (answer.correct) {
+        button.classList.add("correct");
+
+        if (firstAttempt) {
+            score++;
+        }
+
+        document.getElementById("feedback").textContent =
+            firstAttempt
+            ? "Resposta correta! O Ministério do Caos reconhece sua competência."
+            : "Finalmente. O sistema educacional agradece.";
+
+        document.getElementById("scoreText").textContent =
+            `Pontuação: ${score}`;
+
+        document.querySelectorAll(".answer").forEach(btn => {
+            btn.disabled = true;
+            btn.style.pointerEvents = "none";
+        });
+
+        document.getElementById("nextButton").classList.remove("hidden");
+
+    } else {
+        button.classList.add("wrong");
+        button.disabled = true;
+        firstAttempt = false;
+
+        document.getElementById("feedback").textContent =
+            "Alternativa incorreta. Eliminada. Tente novamente, candidata.";
+    }
+}
+
+function nextQuestion() {
+    currentQuestion++;
+
+    if (currentQuestion < questions.length) {
+        showQuestion();
+    } else {
+        finishQuiz();
+    }
+}
+
+function finishQuiz() {
+    document.getElementById("quiz").classList.add("hidden");
+    document.getElementById("result").classList.remove("hidden");
+
+    document.getElementById("progressFill").style.width = "100%";
+
+    const percentage = Math.round((score / questions.length) * 100);
+
+    document.getElementById("finalScore").textContent =
+        `${score} / ${questions.length} (${percentage}%)`;
+
+    let message = "";
+    let finalText = "";
+
+    if (score === 16) {
+        message = "ABSURDAMENTE PERFEITO.";
+        finalText = `Você conseguiu uma pontuação perfeita.
+O Conselho dos Hansels está em choque, Arqui Hansel está revisando
+os dados e o Imperador provavelmente está tentando atribuir
+o mérito a si mesmo.
+
+Não há evidências de fraude. Por enquanto.`;
+
+    } else if (score >= 13) {
+        message = "APROVADA COM HONRAS DO CAOS.";
+        finalText = `Um resultado impressionante.
+Você demonstrou conhecimentos acima da média sobre acontecimentos,
+personagens, referências e informações que nenhuma instituição
+deveria exigir de uma pessoa.
+
+O Ministério do Caos considera sua aprovação.`;
+
+    } else if (score >= 9) {
+        message = "SOBREVIVEU AO PROCESSO SELETIVO.";
+        finalText = `Seu desempenho foi satisfatório.
+Algumas informações ainda estão incompletas, mas você demonstrou
+capacidade de interpretação e resistência ao sistema.
+
+Recomenda-se estudar o Hansel antes da próxima avaliação.`;
+
+    } else if (score >= 5) {
+        message = "RECUPERAÇÃO SENTIMENTAL.";
+        finalText = `A banca identificou potencial, mas também uma quantidade
+preocupante de lacunas no conhecimento.
+
+Recomenda-se revisão do conteúdo, leitura complementar
+e talvez uma reunião com o próprio elaborador da prova,
+que claramente precisa parar de inventar questões.`;
+
+    } else {
+        message = "O MINISTÉRIO DO CAOS SOLICITOU UMA REAVALIAÇÃO.";
+        finalText = `A pontuação foi considerada insuficiente para comprovar
+domínio dos conteúdos absurdamente específicos.
+
+Entretanto, a instituição reconhece que a prova foi elaborada
+por uma pessoa que provavelmente transformaria até uma pergunta
+sobre o horário em um debate filosófico de três horas.
+
+Você está oficialmente autorizada a tentar novamente.`;
+    }
+
+    document.getElementById("resultMessage").textContent = message;
+    document.getElementById("finalText").textContent = finalText;
+}
+</script>
+
+</body>
+</html>
